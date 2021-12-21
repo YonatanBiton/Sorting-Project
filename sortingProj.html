@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("blackish.png");
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+
+        .data-container {
+            width: 600px;
+            height: 384px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .block {
+            width: 28px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background-color: #58b7ff;
+            transition: 0.2s all ease;
+        }
+
+        .block__id {
+            position: absolute;
+            top: -24px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .topnav {
+            overflow: auto;
+            background-color: #58b7ff;
+            position: relative;
+            margin-bottom: 140px;
+        }
+
+        .topnav a {
+            float: left;
+            color: #58b7ff;
+
+            padding: 20px 26px;
+
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="topnav">
+        <a><input type="range" id="range" name="range" min=3 max=20 onchange="arrayGen()"></a>
+        <a><button id="Bubble" class="btn btn-danger" onclick="newManager(this.id)">Bubble Sort</button></a>
+        <a><button id="Insertion" class="btn btn-success" onclick="newManager(this.id)">Insertion Sort</button></a>
+        <a><button id="Selection" class="btn btn-primary" onclick="newManager(this.id)">Selection Sort</button></a>
+    </div>
+
+    <div id="startMsg">
+        <h1>
+            Please choose the array length by using the range input on the top left of the screen to display an array!
+        </h1>
+    </div>
+
+
+    <section class="data-container"></section>
+
+    <div id="wrapper" class="warp-center">
+        <div class="verticle-line"></div>
+    </div>
+
+</body>
+<script>
+
+    //  global var's
+    const container = document.querySelector(".data-container");
+    var flag = 0;
+    var nodeArray = [];
+
+
+    //helper function
+    //this funtion will put the values that are in the verticals bars(a node list) into an array.
+    function NodeToArray() {
+        let blocks = document.querySelectorAll(".block");
+        for (let i = 0; i < blocks.length; i++) {
+            nodeArray[i] = blocks[i].childNodes[0].innerHTML;
+        }
+
+    }
+
+
+    // generate blocks functiob - will generate num's of blocks
+    //this function will generate vertical bars and will set the hight and the value by its value in the array.
+    function generateBlocks(num) {
+
+        if (num && typeof num !== "number") {
+            alert("First argument must be a typeof Number");
+            return;
+        }
+
+        for (let i = 0; i < num; i += 1) {
+            const value = Math.floor(Math.random() * 100) + 3;
+
+            const block = document.createElement("div");
+            block.classList.add("block");
+            block.style.height = `${value * 3}px`;
+            block.style.transform = `translateX(${i * 30}px)`;
+
+            const blockLabel = document.createElement("label");
+            blockLabel.classList.add("block__id");
+            blockLabel.innerHTML = value;
+            blockLabel.style.color = "white";
+
+            block.appendChild(blockLabel);
+            container.appendChild(block);
+        }
+        NodeToArray();
+    }
+
+
+    //bubble sort - this function will sort the array and will swap the blocks in the visualizer
+    async function bubbleSort(delay = 100) {
+        if (delay && typeof delay !== "number") {
+            alert("sort: First argument must be a typeof Number");
+            return;
+        }
+
+        let blocks = document.querySelectorAll(".block");
+        for (let i = 0; i < blocks.length; i++) {
+            for (let j = 0; j < blocks.length - i - 1; j++) {
+                blocks[j].style.backgroundColor = "#FF4949";
+                blocks[j + 1].style.backgroundColor = "#FF4949";
+
+                await new Promise(resolve =>
+                    setTimeout(() => {
+                        resolve();
+                    }, delay)
+                );
+
+                const value1 = Number(blocks[j].childNodes[0].innerHTML);
+                const value2 = Number(blocks[j + 1].childNodes[0].innerHTML);
+                // swapping between the 2 vertical bars visually 
+                if (value1 > value2) {
+
+                    var temp1 = blocks[j].style.height;
+                    var temp2 = blocks[j].childNodes[0].innerText;
+                    blocks[j].style.height = blocks[j + 1].style.height;
+                    blocks[j + 1].style.height = temp1;
+                    blocks[j].childNodes[0].innerText = blocks[j + 1].childNodes[0].innerText;
+                    blocks[j + 1].childNodes[0].innerText = temp2;
+                }
+
+                blocks[j].style.backgroundColor = "#58B7FF";
+                blocks[j + 1].style.backgroundColor = "#58B7FF";
+            }
+
+            blocks[blocks.length - i - 1].style.backgroundColor = "#13CE66";
+        }
+    }
+
+    //Insertion  sort - this function will sort the array in the insertion sort way and will swap the blocks in the visualizer
+    async function InsertionSort(delay = 100) {
+        if (delay && typeof delay !== "number") {
+            alert("sort: First argument must be a typeof Number");
+            return;
+        }
+
+        let blocks = document.querySelectorAll(".block");
+        for (let i = 1; i < blocks.length; i++) {
+            for (let j = i - 1; j > -1; j--) {
+                blocks[j].style.backgroundColor = "#FF4949";
+                blocks[j + 1].style.backgroundColor = "#FF4949";
+
+                await new Promise(resolve =>
+                    setTimeout(() => {
+                        resolve();
+                    }, delay)
+                );
+                const value1 = Number(blocks[j].childNodes[0].innerHTML);
+                const value2 = Number(blocks[j + 1].childNodes[0].innerHTML);
+
+                // swapping between blocks[j] and blocks[j+1]
+                if (value1 > value2) {
+                    var temp1 = blocks[j].style.height;
+                    var temp2 = blocks[j].childNodes[0].innerText;
+                    blocks[j].style.height = blocks[j + 1].style.height;
+                    blocks[j + 1].style.height = temp1;
+                    blocks[j].childNodes[0].innerText = blocks[j + 1].childNodes[0].innerText;
+                    blocks[j + 1].childNodes[0].innerText = temp2;
+                }
+                blocks[j].style.backgroundColor = "#58B7FF";
+                blocks[j + 1].style.backgroundColor = "#58B7FF";
+            }
+
+        }
+    }
+
+    //Selection  sort - this function will sort the array in the Selection sort way and will swap the blocks in the visualizer
+    async function SelectionSort(delay = 100) {
+        if (delay && typeof delay !== "number") {
+            alert("sort: First argument must be a typeof Number");
+            return;
+        }
+
+        let blocks = document.querySelectorAll(".block");
+        var min = 0;
+        for (let i = 0; i < nodeArray.length; i++) {
+            min = i;
+
+            for (let j = i + 1; j < nodeArray.length; j++) {
+                blocks[i].style.backgroundColor = "#FF4949";
+                blocks[j].style.backgroundColor = "#FF4949";
+
+                await new Promise(resolve =>
+                    setTimeout(() => {
+                        resolve();
+                    }, delay)
+                );
+
+                const value1 = Number(blocks[j].childNodes[0].innerHTML);
+                const value2 = Number(blocks[i].childNodes[0].innerHTML);
+
+                //swap the visual of the 2 vertical bars.
+                if (value1 < value2) {
+                    var temp1 = blocks[j].style.height;
+                    var temp2 = blocks[j].childNodes[0].innerText;
+                    blocks[j].style.height = blocks[i].style.height;
+                    blocks[i].style.height = temp1;
+                    blocks[j].childNodes[0].innerText = blocks[i].childNodes[0].innerText;
+                    blocks[i].childNodes[0].innerText = temp2;
+                }
+
+
+                blocks[j].style.backgroundColor = "#58B7FF";
+                blocks[min].style.backgroundColor = "#58B7FF";
+
+            }
+
+            blocks[i].style.backgroundColor = "#13CE66";
+        }
+    }
+
+    //array generatore 
+    function arrayGen() {
+        var msg = document.getElementById("startMsg");
+        msg.style.display = "none";
+
+        //after the first the time we will reset the array.
+        if (flag == 1) {
+            let blocks = document.querySelectorAll(".block");
+            blocks.innerHTML = "";
+            container.innerHTML = "";
+        }
+
+        //generate an array for the first time.
+        var rangeValue = Number(document.getElementById("range").value);
+        generateBlocks(rangeValue);
+        flag = 1;
+    }
+
+    //function manager will call the right function
+    function newManager(clicked) {
+        if (clicked == "Bubble") {
+            bubbleSort();
+        }
+        else if (clicked == "Insertion") {
+
+            InsertionSort();
+            console.log(blocks);
+        }
+        else if (clicked == "Selection") {
+            SelectionSort();
+        }
+
+    }
+</script>
+
+</html>
