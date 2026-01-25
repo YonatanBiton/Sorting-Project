@@ -16,7 +16,7 @@ jobs:
       # 2. They use YOUR Action!
       # Replace 'YourUsername' with your actual GitHub username
       - name: SecretShield Scan
-        uses: YonatanBiton/SecretShield@main 
+        uses: YonatanBiton/SecretShield@dev 
         with:
           target: '.'
           html: 'true'
