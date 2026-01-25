@@ -58,7 +58,7 @@ def test_generic_patterns():
 
     # 2. Generic Bearer Token (Base64 URL Safe)
     # Obfuscated split
-    auth_header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ"
+    auth_header = "eyJhbGciOiJIUzI1NiIsInR5cCD6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ"
 
     # 3. Database Connection String (Password in URL)
     # Scanner should catch "postgres://" pattern
